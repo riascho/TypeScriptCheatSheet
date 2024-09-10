@@ -51,3 +51,73 @@ function add(
     }
 }
 ```
+
+## Object Types
+
+Defining an object type with `object` or `{}` will not define the containing key-value pairs!
+
+```
+const person: object = {
+  name: "Ria",
+  age: 34,
+};
+```
+
+```
+const person: {} = {
+  name: "Ria",
+  age: 34,
+};
+```
+
+Defining the object's specific key-value pair types, separated by `;`. However, it's better to do this by inference.
+
+```
+const person: {
+  name: string;
+  age: number;
+} = {
+  name: "Ria",
+  age: 34,
+};
+```
+
+```
+const person = {
+  name: "Ria",
+  age: 34,
+};
+```
+
+## Array Types
+
+The `[]` after the type indicates that it is an array containing these types.
+
+```
+const hobbies: string[] = ["Yoga", "Swimming", "Coding"];
+```
+
+Union Types:
+
+```
+const labels: (string | number)[] = ["red", "green", 1];
+```
+
+## Tuples
+
+When TypeScript's Inference is not enough, we need to explicitely set the type.
+
+E.g. `role` would be inferred as a simple `(number | string)[]` but if we want it to always only contain a number and a string (in that order), we need to explicitely declare it.
+
+```
+const role: [number, string] = [2, "admin"];
+```
+
+## Types - Recap
+
+- `string`
+- `number`
+- `boolean`
+- `object` or `{}`
+- `[]` arrays (e.g. `(string | boolean)[]`)
+- `[number, string]` tuple - explicit type (amount and order is set)

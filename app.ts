@@ -1,10 +1,17 @@
-console.log("Hello There!");
+const person = {
+  name: "Ria",
+  age: 34,
+  hobbies: ["Yoga", "Swimming", "Coding"],
+  role: [2, "admin"],
+  address: {
+    street: "123 Main St",
+    city: "New York",
+  },
+};
 
-function add(n1: number, n2: number, showResult: boolean, phrase: string) {
-  return n1 + n2;
+console.log(person.name);
+for (const hobby of person.hobbies) {
+  console.log(hobby.toUpperCase());
 }
 
-const num1 = 5;
-let num2 = 2.8;
-
-const result = add(num1, num2, true, "Result is: ");
+const role: [number, string] = [2, "admin"];
