@@ -113,6 +113,46 @@ E.g. `role` would be inferred as a simple `(number | string)[]` but if we want i
 const role: [number, string] = [2, "admin"];
 ```
 
+## Enums
+
+Type only available in TypeScript. By default assigns numbers (from 0) to given labels. These properties can be accessed and assigned via dot notation.
+
+```
+enum ROLES { ADMIN, READ_ONLY, VIEWER }
+
+console.log(ROLES.ADMIN === 0); // true
+```
+
+Will be compiled in JavaScript as below:
+
+```
+var ROLES;
+(function (ROLES) {
+    ROLES[ROLES["ADMIN"] = 0] = "ADMIN";
+    ROLES[ROLES["READ_ONLY"] = 1] = "READ_ONLY";
+    ROLES[ROLES["VIEWER"] = 2] = "VIEWER";
+})(ROLES || (ROLES = {}));
+```
+
+This is different for strings though or other definitions
+
+```
+enum ROLES {
+  ADMIN = "admin",
+  READ_ONLY = "read-only",
+  VIEWER = 100,
+}
+```
+
+```
+var ROLES;
+(function (ROLES) {
+    ROLES["ADMIN"] = "admin";
+    ROLES["READ_ONLY"] = "read-only";
+    ROLES["VIEWER"] = "viewer";
+})(ROLES || (ROLES = {}));
+```
+
 ## Types - Recap
 
 - `string`
@@ -121,3 +161,4 @@ const role: [number, string] = [2, "admin"];
 - `object` or `{}`
 - `[]` arrays (e.g. `(string | boolean)[]`)
 - `[number, string]` tuple - explicit type (amount and order is set)
+- `enum` usually in upper case
