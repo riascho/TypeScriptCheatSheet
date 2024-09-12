@@ -115,7 +115,7 @@ const role: [number, string] = [2, "admin"];
 
 ## Enums
 
-Type only available in TypeScript. By default assigns numbers (from 0) to given labels. These properties can be accessed and assigned via dot notation.
+Type only available in TypeScript. By default assigns numbers (from 0) to given labels. These properties can be accessed and assigned via dot notation. Enums are usually declared in uppercase.
 
 ```
 enum ROLES { ADMIN, READ_ONLY, VIEWER }
@@ -153,12 +153,39 @@ var ROLES;
 })(ROLES || (ROLES = {}));
 ```
 
-## Types - Recap
+## Type Aliases
+
+create your own type with any definition (usually using type unions). Type Aliases are usually declared in Title case.
+
+```
+type MyOwnTypeAlias = number | string;
+let numberOrString: MyOwnTypeAlias;
+type YesOrNo = "yes" | "no";
+let gameOver: YesOrNo;
+```
+
+Type Aliases are not limited to storing union types though - you can also provide an alias to a (possibly complex) object type.
+
+```
+type User = { name: string; age: number };
+
+function greet(user: User) {
+  console.log('Hi, I am ' + user.name);
+}
+
+function isOlder(user: User, checkAge: number) {
+  return checkAge > user.age;
+}
+```
+
+# Types - Recap
 
 - `string`
 - `number`
 - `boolean`
 - `object` or `{}`
-- `[]` arrays (e.g. `(string | boolean)[]`)
+- `[]` arrays
 - `[number, string]` tuple - explicit type (amount and order is set)
-- `enum` usually in upper case
+- `enum` typename and properties usually go in upper case
+- `string | boolean` union types
+- `'as-text' | 'as-number'` literal types
