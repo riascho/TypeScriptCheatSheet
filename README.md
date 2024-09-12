@@ -178,7 +178,7 @@ function isOlder(user: User, checkAge: number) {
 }
 ```
 
-# Types - Recap
+## Types - Recap
 
 - `string`
 - `number`
@@ -189,3 +189,63 @@ function isOlder(user: User, checkAge: number) {
 - `enum` typename and properties usually go in upper case
 - `string | boolean` union types
 - `'as-text' | 'as-number'` literal types
+
+## Function Types
+
+In general it is best left to TypeScript to infer the type that is returned from a function. The return type `: void` indicates the function does not return anything (`return` keyword is not used). The type `: undefined` can be used when the function has a `return` statement but no value.
+e.g.
+
+```
+function printEach(arr: number[]): void {
+  arr.forEach((num) => console.log(num));
+}
+
+function printEach2(arr: number[]): undefined {
+  arr.forEach((num) => console.log(num));
+  return;
+}
+```
+
+Use `: Function` type when a variable is only to be declared for a (any) function.
+
+```
+let combineValues: Function;
+combineValues = addition;
+combineValues = 88; // this will throw a compile time error because it cannot be assigned to a number!
+console.log(combineValues(8, 8));
+```
+
+Create a function type instead to be more specific about what parameters and return values the function should have.
+
+```
+let combineValues: () => number; // defines a function that has no parameters and returns a number
+
+let combineValues: (x: number, y: number) => string; // defines a function that has two parameters of type number and returns a string
+```
+
+Use Function Type definition for callback functions as well.
+
+```
+function addAndHandle(n1: number, n2: number, cb: (res: number) => void) {
+  const result = n1 + n2;
+  cb(result);
+}
+
+addAndHandle(10, 20, (result) => console.log(result)); // cb is invoked with the result with type checking
+addAndHandle(10, 20, (result, b) => console.log(result)); // throws compile time error because only one parameter is expected
+```
+
+Setting a return value of `void` will ignore any returned values from the callback. It is simply indicating that the possible return value may not be used.
+
+If the callback function should be prohibited from returning anything, use `undefined`.
+
+```
+function addAndHandle(n1: number, n2: number, cb: (res: number) => undefined) {
+  const result = n1 + n2;
+  cb(result);
+}
+
+addAndHandle(10, 20, (result) => {
+  return result;
+}); // throws error when function type is defined to return undefined!
+```
