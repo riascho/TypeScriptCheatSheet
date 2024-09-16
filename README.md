@@ -178,18 +178,6 @@ function isOlder(user: User, checkAge: number) {
 }
 ```
 
-## Types - Recap
-
-- `string`
-- `number`
-- `boolean`
-- `object` or `{}`
-- `[]` arrays
-- `[number, string]` tuple - explicit type (amount and order is set)
-- `enum` typename and properties usually go in upper case
-- `string | boolean` union types
-- `'as-text' | 'as-number'` literal types
-
 ## Function Types
 
 In general it is best left to TypeScript to infer the type that is returned from a function. The return type `: void` indicates the function does not return anything (`return` keyword is not used). The type `: undefined` can be used when the function has a `return` statement but no value.
@@ -249,3 +237,37 @@ addAndHandle(10, 20, (result) => {
   return result;
 }); // throws error when function type is defined to return undefined!
 ```
+
+### `never`
+
+When a function does not return `undefined` and should never return any value. For example for utility functions that throw errors.
+
+```
+function generateError(message: string, code: number): never {
+  throw { message: message, errorCode: code };
+}
+
+generateError("An error occurred!", 500);
+```
+
+## Types - Recap
+
+| Type                                  | Description                                                                                                                           |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `string`                              | strings                                                                                                                               |
+| `number`                              | numbers                                                                                                                               |
+| `boolean`                             | booleans                                                                                                                              |
+| `object`                              | or `{}`                                                                                                                               |
+| `[]`                                  | arrays, e.g. ` number[]` is array of numbers                                                                                          |
+| `[number, string]`                    | Tuple - explicit type (amount and order is set)                                                                                       |
+| `enum`                                | Typename and properties usually go in upper case                                                                                      |
+| `string \| boolean`                   | Union types                                                                                                                           |
+| `'as-text' \| 'as-number'`            | Literal types                                                                                                                         |
+| `type`                                | Use this to define your own custom type!                                                                                              |
+| `Function`                            | Set type as ANY function                                                                                                              |
+| `void`                                | Set as return type for a function to ignore any return values                                                                         |
+| `undefined`                           | Set as return type for a function to prevent it from returning anything.                                                              |
+| `never`                               | Set as return type for a function which does not return `undefined` either.                                                           |
+| `callback: (input: number) => number` | Define concrete function parameters and return types                                                                                  |
+| `unknown`                             | This type basically tells TypeScript that type checking will be done later at some point via JavaScript (some form of `typeof` check) |
+| `any`                                 | Disables type checking                                                                                                                |
