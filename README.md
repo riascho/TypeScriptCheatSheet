@@ -7,6 +7,7 @@
 - `tsc --init` will create `tsconfig.json` where we can configure how to compile our files.
 - after `tsconfig.json` is set up, you can simply run `tsc` (or `tsc -w` with watch mode) to compile your whole project
 - `include` or `exclude` files or directories for compilation (as an array) in `tsconfig.json` after the `"compilerOptions"`
+- use the directories `src` (typescript files) and `dist` (javascript files) for bigger projects. Specify these in `rootDir` (input) and `outDir` (output) respectively in the `tsconfig.json` for the TypeScript compilation.
 
 ### TypeScript Type Check
 
