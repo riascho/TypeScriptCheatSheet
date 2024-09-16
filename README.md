@@ -1,7 +1,12 @@
 # TypeScript Basics
 
 - download via `npm install -g typescript`
-- type checking at compile time (run `tsc filename.js`) whereas JavaScript only gets type errors at run time
+- type checking at compile time, whereas JavaScript only gets type errors at run time
+- `tsc [filename.ts]` to compile specific file
+- `tsc [filename.ts] --watch` compile specific file in watch mode (re-compiles every time after file changes)
+- `tsc --init` will create `tsconfig.json` where we can configure how to compile our files.
+- after `tsconfig.json` is set up, you can simply run `tsc` (or `tsc -w` with watch mode) to compile your whole project
+- `include` or `exclude` files or directories for compilation (as an array) in `tsconfig.json` after the `"compilerOptions"`
 
 ### TypeScript Type Check
 
