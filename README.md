@@ -327,3 +327,76 @@ engineering.describe(); // This will throw an error
 const engineering = { name: "Engineering", describe: support.describe };
 engineering.describe(); // This will work - Output: Welcome to the ENGINEERING department
 ```
+
+## Access Modifiers
+
+In TypeScript, you can control the visibility of class members using access modifiers.
+
+- **public:** Members are accessible from anywhere.
+- **private:** Members are only accessible within the class they are defined.
+- **readonly:** Members can be read from anywhere but cannot be modified after their initial assignment.
+
+By default, all class members are `public` unless explicitly specified otherwise.
+
+```typescript
+class Department {
+  readonly id: number;
+  public name: string;
+  private employees: string[] = [];
+
+  constructor(parameter: string) {
+    this.id = id;
+    this.name = parameter;
+  }
+
+  addEmployee(...employee: string[]) {
+    this.employees.push(...employee);
+  }
+
+  printEmployees() {
+    console.log(this.employees.length);
+    console.log(...this.employees);
+  }
+}
+
+const support = new Department("Support");
+support.addEmployee("Ria", "Mariana", "Aya");
+
+// The following line will throw an error because 'employees' is a private member
+support.employees[3] = "Jon"; // Error: Property 'employees' is private and only accessible within class 'Department'
+
+// The following line will throw an error because 'id' is a readonly member
+support.id = 2; // Error: Cannot assign to 'id' because it is a read-only property
+```
+
+_Note:_ These modifiers are introduced by TypeScript. Meaning that, JavaScript will not differentiate and it is possible to modify class properties or methods from outside. Hence they will only cause compile time errors but no runtime errors.
+
+## Shorthand Initialization
+
+Instead of writing this:
+
+```typescript
+class Product {
+  title: string;
+  price: number;
+  private isListed: boolean;
+
+  constructor(name: string, pr: number) {
+    this.title = name;
+    this.price = pr;
+    this.isListed = true;
+  }
+}
+```
+
+You can use Shorthand Initialization like this (duplicate field properties can be used as parameters with their access modifiers)
+
+```typescript
+class Product {
+  private isListed: boolean;
+
+  constructor(public title: string, public price: number) {
+    this.isListed = true;
+  }
+}
+```
