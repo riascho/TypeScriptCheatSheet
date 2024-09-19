@@ -11,50 +11,45 @@
 
 ### TypeScript Type Check
 
-```
-function add(n1: number, n2: number)
+```typescript
+function add(n1: number, n2: number);
 ```
 
 _Note:_ The core primitive types in TypeScript are all lowercase!
 
 ### JavaScript Type Check
 
-```
+```typescript
 if (typeof n1 !== "number" || typeof n2 !== "number") {
-    throw new Error("Incorrect input!");
-    }
+  throw new Error("Incorrect input!");
+}
 ```
 
 ## Type Inference (implicit)
 
 TypeScript assigns types by inference upon declaration of variable.
 
-```
-const num1 = 5;     // Type: 5
-let num2 = 2.8;     // Type: number
+```typescript
+const num1 = 5; // Type: 5
+let num2 = 2.8; // Type: number
 ```
 
 ## Type Assignment (explicit)
 
 For unknown variables the type has to be assigned, so TypeScript knows what to expect.
 
-```
+```typescript
 let num1: number;
 ```
 
-```
-function add(
-    n1: number,
-    n2: number,
-    showResult: boolean,
-    phrase: string) {
-    const result = n1 + n2;
-    if (showResult === true){
-        console.log(phrase + result);
-    }
-    else {
-        return result;
-    }
+```typescript
+function add(n1: number, n2: number, showResult: boolean, phrase: string) {
+  const result = n1 + n2;
+  if (showResult === true) {
+    console.log(phrase + result);
+  } else {
+    return result;
+  }
 }
 ```
 
@@ -62,14 +57,14 @@ function add(
 
 Defining an object type with `object` or `{}` will not define the containing key-value pairs!
 
-```
+```typescript
 const person: object = {
   name: "Ria",
   age: 34,
 };
 ```
 
-```
+```typescript
 const person: {} = {
   name: "Ria",
   age: 34,
@@ -78,7 +73,7 @@ const person: {} = {
 
 Defining the object's specific key-value pair types, separated by `;`. However, it's better to do this by inference.
 
-```
+```typescript
 const person: {
   name: string;
   age: number;
@@ -88,7 +83,7 @@ const person: {
 };
 ```
 
-```
+```typescript
 const person = {
   name: "Ria",
   age: 34,
@@ -99,13 +94,13 @@ const person = {
 
 The `[]` after the type indicates that it is an array containing these types.
 
-```
+```typescript
 const hobbies: string[] = ["Yoga", "Swimming", "Coding"];
 ```
 
 Union Types:
 
-```
+```typescript
 const labels: (string | number)[] = ["red", "green", 1];
 ```
 
@@ -115,7 +110,7 @@ When TypeScript's Inference is not enough, we need to explicitely set the type.
 
 E.g. `role` would be inferred as a simple `(number | string)[]` but if we want it to always only contain a number and a string (in that order), we need to explicitely declare it.
 
-```
+```typescript
 const role: [number, string] = [2, "admin"];
 ```
 
@@ -123,26 +118,30 @@ const role: [number, string] = [2, "admin"];
 
 Type only available in TypeScript. By default assigns numbers (from 0) to given labels. These properties can be accessed and assigned via dot notation. Enums are usually declared in uppercase.
 
-```
-enum ROLES { ADMIN, READ_ONLY, VIEWER }
+```typescript
+enum ROLES {
+  ADMIN,
+  READ_ONLY,
+  VIEWER,
+}
 
 console.log(ROLES.ADMIN === 0); // true
 ```
 
 Will be compiled in JavaScript as below:
 
-```
+```typescript
 var ROLES;
 (function (ROLES) {
-    ROLES[ROLES["ADMIN"] = 0] = "ADMIN";
-    ROLES[ROLES["READ_ONLY"] = 1] = "READ_ONLY";
-    ROLES[ROLES["VIEWER"] = 2] = "VIEWER";
+  ROLES[(ROLES["ADMIN"] = 0)] = "ADMIN";
+  ROLES[(ROLES["READ_ONLY"] = 1)] = "READ_ONLY";
+  ROLES[(ROLES["VIEWER"] = 2)] = "VIEWER";
 })(ROLES || (ROLES = {}));
 ```
 
 This is different for strings though or other definitions
 
-```
+```typescript
 enum ROLES {
   ADMIN = "admin",
   READ_ONLY = "read-only",
@@ -150,12 +149,12 @@ enum ROLES {
 }
 ```
 
-```
+```typescript
 var ROLES;
 (function (ROLES) {
-    ROLES["ADMIN"] = "admin";
-    ROLES["READ_ONLY"] = "read-only";
-    ROLES["VIEWER"] = "viewer";
+  ROLES["ADMIN"] = "admin";
+  ROLES["READ_ONLY"] = "read-only";
+  ROLES["VIEWER"] = "viewer";
 })(ROLES || (ROLES = {}));
 ```
 
@@ -163,7 +162,7 @@ var ROLES;
 
 create your own type with any definition (usually using type unions). Type Aliases are usually declared in Title case.
 
-```
+```typescript
 type MyOwnTypeAlias = number | string;
 let numberOrString: MyOwnTypeAlias;
 type YesOrNo = "yes" | "no";
@@ -172,11 +171,11 @@ let gameOver: YesOrNo;
 
 Type Aliases are not limited to storing union types though - you can also provide an alias to a (possibly complex) object type.
 
-```
+```typescript
 type User = { name: string; age: number };
 
 function greet(user: User) {
-  console.log('Hi, I am ' + user.name);
+  console.log("Hi, I am " + user.name);
 }
 
 function isOlder(user: User, checkAge: number) {
@@ -189,7 +188,7 @@ function isOlder(user: User, checkAge: number) {
 In general it is best left to TypeScript to infer the type that is returned from a function. The return type `: void` indicates the function does not return anything (`return` keyword is not used). The type `: undefined` can be used when the function has a `return` statement but no value.
 e.g.
 
-```
+```typescript
 function printEach(arr: number[]): void {
   arr.forEach((num) => console.log(num));
 }
@@ -202,7 +201,7 @@ function printEach2(arr: number[]): undefined {
 
 Use `: Function` type when a variable is only to be declared for a (any) function.
 
-```
+```typescript
 let combineValues: Function;
 combineValues = addition;
 combineValues = 88; // this will throw a compile time error because it cannot be assigned to a number!
@@ -211,7 +210,7 @@ console.log(combineValues(8, 8));
 
 Create a function type instead to be more specific about what parameters and return values the function should have.
 
-```
+```typescript
 let combineValues: () => number; // defines a function that has no parameters and returns a number
 
 let combineValues: (x: number, y: number) => string; // defines a function that has two parameters of type number and returns a string
@@ -219,7 +218,7 @@ let combineValues: (x: number, y: number) => string; // defines a function that 
 
 Use Function Type definition for callback functions as well.
 
-```
+```typescript
 function addAndHandle(n1: number, n2: number, cb: (res: number) => void) {
   const result = n1 + n2;
   cb(result);
@@ -233,7 +232,7 @@ Setting a return value of `void` will ignore any returned values from the callba
 
 If the callback function should be prohibited from returning anything, use `undefined`.
 
-```
+```typescript
 function addAndHandle(n1: number, n2: number, cb: (res: number) => undefined) {
   const result = n1 + n2;
   cb(result);
@@ -248,7 +247,7 @@ addAndHandle(10, 20, (result) => {
 
 When a function does not return `undefined` and should never return any value. For example for utility functions that throw errors.
 
-```
+```typescript
 function generateError(message: string, code: number): never {
   throw { message: message, errorCode: code };
 }
@@ -277,3 +276,54 @@ generateError("An error occurred!", 500);
 | `callback: (input: number) => number` | Define concrete function parameters and return types                                                                                  |
 | `unknown`                             | This type basically tells TypeScript that type checking will be done later at some point via JavaScript (some form of `typeof` check) |
 | `any`                                 | Disables type checking                                                                                                                |
+
+# TypeScript Classes and Interfaces
+
+## Class Declaration
+
+In TypeScript, classes are declared using the `class` keyword followed by the class name. By convention, class names are capitalized.
+
+## Constructor
+
+The constructor method is called every time a new instance of the class is created. It is used to initialize the object's properties.
+
+## Class Fields
+
+Class fields define the keys and their value types within the class.
+
+## Methods
+
+Functions within objects are called methods. In TypeScript, you can add a dummy parameter and declare its type to be the class itself to make it type-safe. This ensures that the method can only be called on instances of the class.
+
+```typescript
+class Department {
+  constructor(parameter: string) {
+    this.name = parameter;
+  }
+  name: string;
+  describe(this: Department) {
+    console.log(`Welcome to the ${this.name.toUpperCase()} department`);
+  }
+}
+```
+
+## Creating Instances
+
+You can create instances of a class using the `new` keyword followed by the class name and any required parameters.
+
+```typescript
+const support = new Department("Support");
+const sales = new Department("Sales");
+```
+
+## The `this` Context
+
+The `this` context in TypeScript refers to the current instance of the class. When assigning methods to objects that are not instances of the class, you need to ensure that the required properties are present.
+
+```typescript
+const engineering = { describe: support.describe };
+engineering.describe(); // This will throw an error
+
+const engineering = { name: "Engineering", describe: support.describe };
+engineering.describe(); // This will work - Output: Welcome to the ENGINEERING department
+```
