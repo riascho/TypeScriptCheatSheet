@@ -400,3 +400,129 @@ class Product {
   }
 }
 ```
+
+## Inheritance
+
+Use inheritance to create `sub-classes` that are passed on properties and methods from a `base class` with the keyword `extends`.
+
+- only one class be inherited from
+- `super()` has to be called in the sub-class' constructor to pass in the same properties from the base class constructor. `super()` has to be called before any other sub-class specific properties.
+- `private` will not be inherited and therefore the sub-class will have no access to private properties or methods of the base class.
+- use `protected` if the property shall only be accessible from the class object but this will be inherited as well to sub-classes.
+
+```typescript
+// Base Class
+class Department {
+  // private employees: string[] = [];
+  protected employees: string[] = [];
+  constructor(readonly id: string, public name: string) {}
+}
+```
+
+```typescript
+// Sub-Class
+class ITDepartment extends Department {
+  public admins: string[];
+
+  constructor(uid: string, admins: string[]) {
+    super(uid, "IT");
+    this.admins = admins;
+  }
+  getAdmins() {
+    console.log(...this.admins, this.id);
+  }
+}
+```
+
+initializing `sub-class` object
+
+```typescript
+const it = new ITDepartment("006", ["Jon", "Bart"]);
+it.getAdmins();
+```
+
+initializing `base class` object
+
+```typescript
+const support = new Department("002", "Support");
+```
+
+## Getters & Setters
+
+A `getter` function in a class is a method that allows you to access the value of a private property from outside the class. It is defined using the `get` keyword and typically returns the value of the property. It has to `return` something.
+
+```typescript
+class AccountingDepartment extends Department {
+  private lastReport: string;
+
+  constructor(uid: string, private reports: string[]) {
+    super(uid, "Accounting");
+    this.lastReport = reports[-1];
+  }
+
+  get mostRecentReport() {
+    if (this.reports.length > 0) {
+      return this.lastReport;
+    } else {
+      throw new Error("No reports found.");
+    }
+  }
+
+  addReport(report: string) {
+    this.lastReport = report;
+    this.reports.push(report);
+  }
+}
+```
+
+The `get` method is called like it was a property.
+
+```typescript
+console.log(accounting.mostRecentReport);
+```
+
+---
+
+A `setter` function in a class is a method that allows you to set the value of a private property from outside the class. It is defined using the `set` keyword and typically assigns a value to the property. It must take a parameter.
+
+```typescript
+class AccountingDepartment extends Department {
+  private lastReport: string;
+
+  constructor(uid: string, private reports: string[]) {
+    super(uid, "Accounting");
+    this.lastReport = reports[-1];
+  }
+
+  set mostRecentReport(value: string) {
+    this.addReport(value);
+  }
+
+  addReport(report: string) {
+    this.lastReport = report;
+    this.reports.push(report);
+  }
+}
+```
+
+The `set` method is called like it was a property.
+
+```typescript
+accounting.mostRecentReport =
+  "AI Integration has doubled over the last 3 months!";
+```
+
+---
+
+In both scenarios accessing the `private` `lastReport` property will not work. For this reason, the `getter` and `setter` methods were introduced.
+
+```typescript
+/* both will throw error:
+
+'Property 'lastReport' is private and only accessible within class 'AccountingDepartment'. 
+
+*/
+
+console.log(accounting.lastReport);
+accounting.lastReport = "No updates.";
+```
