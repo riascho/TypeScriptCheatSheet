@@ -5,6 +5,7 @@ class Department {
   public name: string;
   // private employees: string[] = []; // private makes this only accessible from within the class (i.e. the class methods have to be used to modify it)
   protected employees: string[] = []; // private makes this only accessible from within the class (i.e. the class methods have to be used to modify it)
+  static fiscalYear = 2024; // static properties can be called on the class itself without having to instantiate a class object
 
   // constructor method is called every time a new instance of the class is created
   constructor(id: string, parameter: string) {
@@ -16,6 +17,10 @@ class Department {
   describe(this: Department) {
     // adding dummy parameter and declaring type to be the class makes it type safe, so that the method can only be called on instances of this class
     console.log(`Welcome to the ${this.name.toUpperCase()} department`);
+  }
+  // static methods can be called on the class itself without having to instantiate a class object
+  static createEmployee(name: string) {
+    return { name: name };
   }
 
   addEmployee(...employee: string[]) {
@@ -129,5 +134,78 @@ accounting.mostRecentReport =
 accounting.printReports();
 
 // both will throw error 'Property 'lastReport' is private and only accessible within class 'AccountingDepartment'.
-console.log(accounting.lastReport);
-accounting.lastReport = "No updates.";
+// console.log(accounting.lastReport);
+// accounting.lastReport = "No updates.";
+
+// accessing static methods & properties
+const employee1 = Department.createEmployee("Josie");
+console.log(employee1);
+console.log(Department.fiscalYear);
+
+// Abstract Class
+abstract class Project {
+  constructor(protected projectName: string) {}
+
+  abstract changeName(name: string): void; // abstract methods have to be implemented in the derived classes
+}
+
+class AIProject extends Project {
+  // base class has abstract method, so derived class has to implement it
+  changeName(name: string) {
+    if (name.startsWith("AI")) {
+      this.projectName = name;
+    } else {
+      throw new Error("Project name must start with AI");
+    }
+  }
+}
+
+// class SalesProject extends Project {
+// if the changeName method is not implemented, this will throw an error
+// " Non-abstract class 'SalesProject' does not implement inherited abstract member changeName from class 'Project'. "
+// }
+
+const project1 = new AIProject("AI Integration");
+project1.changeName("AI Automation");
+// project1.changeName("Automation"); // will throw error
+
+// Singleton Pattern
+
+class House {
+  name: string;
+  protected constructor(name: string) {
+    this.name = name;
+  }
+
+  describe() {
+    console.log("Welcome to", this.name);
+  }
+}
+
+// every house should only have one instance of kitchen
+class Kitchen extends House {
+  // private keyword applied for constructor
+  private constructor(name: string) {
+    super(name);
+  }
+
+  private static instance: Kitchen; // here the single object is stored as instance variable
+
+  static setInstance() {
+    // if this class has been instantiated already (= instance variable is not null)
+    if (Kitchen.instance) {
+      return this.instance; // it will return the instance and assign it to the object
+    } // else we can create the instance (i.e. the object) from within the class declaration. This is the only way to create an instance of this class
+    this.instance = new Kitchen("Ikea");
+    return this.instance;
+  }
+}
+
+// const kitchen = new Kitchen("Ikea"); // will throw error: Constructor of class 'Kitchen' is private and only accessible within the class declaration.
+
+const kitchen = Kitchen.setInstance();
+const kitchen2 = Kitchen.setInstance(); // this will return the same instance as kitchen
+
+console.log(kitchen);
+console.log(kitchen2);
+// both will log " Kitchen { name: 'Ikea' } "

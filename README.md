@@ -15,7 +15,7 @@
 function add(n1: number, n2: number);
 ```
 
-_Note:_ The core primitive types in TypeScript are all lowercase!
+_NOTE:_ The core primitive types in TypeScript are all lowercase!
 
 ### JavaScript Type Check
 
@@ -369,7 +369,7 @@ support.employees[3] = "Jon"; // Error: Property 'employees' is private and only
 support.id = 2; // Error: Cannot assign to 'id' because it is a read-only property
 ```
 
-_Note:_ These modifiers are introduced by TypeScript. Meaning that, JavaScript will not differentiate and it is possible to modify class properties or methods from outside. Hence they will only cause compile time errors but no runtime errors.
+_NOTE:_ These modifiers are introduced by TypeScript. Meaning that, JavaScript will not differentiate and it is possible to modify class properties or methods from outside. Hence they will only cause compile time errors but no runtime errors.
 
 ## Shorthand Initialization
 
@@ -525,4 +525,124 @@ In both scenarios accessing the `private` `lastReport` property will not work. F
 
 console.log(accounting.lastReport);
 accounting.lastReport = "No updates.";
+```
+
+## Static Methods & Properties
+
+These can be defined within a class but are accessible without having to instantiate a class object.
+
+```typescript
+class Department {
+  // static property
+  static fiscalYear = 2024;
+  protected employees: string[] = [];
+  constructor(readonly id: string, public name: string) {}
+
+  describe(this: Department) {
+    console.log(`Welcome to the ${this.name.toUpperCase()} department`);
+  }
+  // static method
+  static createEmployee(name: string) {
+    return { name: name };
+  }
+}
+```
+
+Can be used without instantiating the class:
+
+```typescript
+const employee1 = Department.createEmployee("Josie");
+console.log(employee1); // { name: 'Josie' }
+console.log(Department.fiscalYear); // 2024
+```
+
+_NOTE:_ static members cannot be accessed from within the class, because the `this` keyword is not attached to them. Instead you would have to use it with the class namespace instead (e.g. instead of `this.fiscalYear` you can refer to it as `Department.fiscalYear`)
+
+## Abstract Classes & Methods
+
+An abstract class is a class that has instructions (methods) for any derived sub-classes. Abstract classes are useful for defining a common interface for a group of related classes while allowing each derived class to provide its own specific implementation.
+
+Abstract methods are used when you want to enforce a specific method from the base class to be implemented on any derived sub-classes.
+
+- abstract classes cannot be instantiated.
+- if the `abstract` keyword is used on any abstract property or method, the whole class will need to be defined as `abstract`.
+- abstract methods do not have a body but will need a return type. They essentially only describe **WHAT** they have to be used for and that they **have to be** implemented by the sub-class, but the **HOW** is up to the sub-class to be defined.
+
+```typescript
+abstract class Project {
+  constructor(protected projectName: string) {}
+
+  abstract changeName(name: string): void; // abstract methods have to be implemented in the derived classes
+}
+
+class AIProject extends Project {
+  // base class has abstract method, so derived class has to implement it
+  changeName(name: string) {
+    if (name.startsWith("AI")) {
+      this.projectName = name;
+    } else {
+      throw new Error("Project name must start with AI");
+    }
+  }
+}
+
+class SalesProject extends Project {
+  // if the changeName method is not implemented, this will throw an error
+  // " Non-abstract class 'SalesProject' does not implement inherited abstract member changeName from class 'Project'. "
+}
+
+const project1 = new AIProject("AI Integration");
+project1.changeName("AI Automation");
+project1.changeName("Automation"); // will throw error
+```
+
+## Singletons & Private Constructors
+
+The Singleton pattern is a way of making sure that a class can only be instantiated once, i.e. that only one instance of the class can exist at any given time. This is done by setting the `private` keyword in front of the constructor of that class.
+
+```typescript
+class House {
+  protected constructor(name: string) {}
+}
+
+// every house should only have one instance of kitchen
+class Kitchen extends House {
+  // private keyword applied for constructor
+  private constructor(name: string) {
+    super(name);
+  }
+}
+
+const kitchen = new Kitchen("Ikea"); // will throw error:
+// " Constructor of class 'Kitchen' is private and only accessible within the class declaration. "
+```
+
+However, now we cannot instantiate this class at all. We will need to implement a `static` method to kitchen class where the object is instantiated only once.
+
+```typescript
+class Kitchen extends House {
+  private constructor(name: string) {
+    super(name);
+  }
+
+  private static instance: Kitchen; // here the single object is stored as instance variable
+
+  static setInstance() {
+    // if this class has been instantiated already (= instance variable is not null)
+    if (Kitchen.instance) {
+      return this.instance; // it will return the instance and assign it to the object
+    } // else we can create the instance (i.e. the object) from within the class declaration. This is the only way to create an instance of this class
+    this.instance = new Kitchen("Ikea");
+    return this.instance;
+  }
+}
+
+// const kitchen = new Kitchen("Ikea"); // will throw error: Constructor of class 'Kitchen' is private and only accessible within the class declaration.
+
+const kitchen = Kitchen.setInstance();
+const kitchen2 = Kitchen.setInstance(); // this will return the same instance as kitchen
+
+console.log(kitchen);
+console.log(kitchen2);
+// both will log " Kitchen { name: 'Ikea' } "
 ```
