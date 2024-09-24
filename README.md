@@ -277,7 +277,7 @@ generateError("An error occurred!", 500);
 | `unknown`                             | This type basically tells TypeScript that type checking will be done later at some point via JavaScript (some form of `typeof` check) |
 | `any`                                 | Disables type checking                                                                                                                |
 
-# TypeScript Classes and Interfaces
+# TypeScript Classes
 
 ## Class Declaration
 
@@ -646,3 +646,18 @@ console.log(kitchen);
 console.log(kitchen2);
 // both will log " Kitchen { name: 'Ikea' } "
 ```
+
+# TypeScript Interfaces
+
+Interfaces are used to define the structure of objects. It specifies the properties and methods that an object must have, but it does not provide implementations for those methods.
+Interfaces are used to define the shape of data and to enforce type checking at compile time.
+
+- interfaces can only be used to define the types in an object
+- custom types can be used to define anything, e.g. union types
+- interfaces can be used to define the type for classes (with `implements` keyword)
+- a class can implement many interfaces (as opposed to only inherit from one base class)
+- interfaces are used to share functionality amongst different classes (a minimum base structure), but any class that implements it, can define other properties and methods on top.
+- a bit like abstract classes but without the implementation instructions
+- interface properties can be `readonly` but not `public` or `private`
+- interfaces can be inherited as well using the `extends` keyword (as opposed to classes, it's possible to inherit from multiple interfaces)
+- methods and properties in an interface can be marked as optional by using `?` at the end
