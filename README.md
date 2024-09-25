@@ -9,6 +9,8 @@
 - `include` or `exclude` files or directories for compilation (as an array) in `tsconfig.json` after the `"compilerOptions"`
 - use the directories `src` (typescript files) and `dist` (javascript files) for bigger projects. Specify these in `rootDir` (input) and `outDir` (output) respectively in the `tsconfig.json` for the TypeScript compilation.
 
+see [basics.ts](./src/basics.ts)
+
 ### TypeScript Type Check
 
 ```typescript
@@ -116,6 +118,8 @@ const role: [number, string] = [2, "admin"];
 
 ## Enums
 
+see [enums.ts](./src/enums.ts)
+
 Type only available in TypeScript. By default assigns numbers (from 0) to given labels. These properties can be accessed and assigned via dot notation. Enums are usually declared in uppercase.
 
 ```typescript
@@ -184,6 +188,8 @@ function isOlder(user: User, checkAge: number) {
 ```
 
 ## Function Types
+
+see [functions.ts](./src/functions.ts)
 
 In general it is best left to TypeScript to infer the type that is returned from a function. The return type `: void` indicates the function does not return anything (`return` keyword is not used). The type `: undefined` can be used when the function has a `return` statement but no value.
 e.g.
@@ -262,6 +268,7 @@ generateError("An error occurred!", 500);
 | `string`                              | strings                                                                                                                               |
 | `number`                              | numbers                                                                                                                               |
 | `boolean`                             | booleans                                                                                                                              |
+| `Date`                                | date object as built-in in JavaScript                                                                                                 |
 | `object`                              | or `{}`                                                                                                                               |
 | `[]`                                  | arrays, e.g. ` number[]` is array of numbers                                                                                          |
 | `[number, string]`                    | Tuple - explicit type (amount and order is set)                                                                                       |
@@ -278,6 +285,8 @@ generateError("An error occurred!", 500);
 | `any`                                 | Disables type checking                                                                                                                |
 
 # TypeScript Classes
+
+see [classes.ts](./src/classes.ts)
 
 ## Class Declaration
 
@@ -649,6 +658,8 @@ console.log(kitchen2);
 
 # TypeScript Interfaces
 
+see [interfaces.ts](./src/interfaces.ts)
+
 Interfaces are used to define the structure of objects. It specifies the properties and methods that an object must have, but it does not provide implementations for those methods.
 Interfaces are used to define the shape of data and to enforce type checking at compile time.
 
@@ -661,3 +672,101 @@ Interfaces are used to define the shape of data and to enforce type checking at 
 - interface properties can be `readonly` but not `public` or `private`
 - interfaces can be inherited as well using the `extends` keyword (as opposed to classes, it's possible to inherit from multiple interfaces)
 - methods and properties in an interface can be marked as optional by using `?` at the end
+
+# TypeScript - Advanced
+
+see [advancedTypeScript.ts](./src/advancedTypeScript.ts)
+
+## Intersection Types
+
+Related to Interface Inheritance. Ability to combine types.
+
+```typescript
+type Admin = {
+  name: string;
+  privileges: string[];
+};
+
+type Employee = {
+  name: string;
+  startDate: Date;
+};
+
+type ElevatedEmployee = Admin & Employee; // Intersection type
+
+const elevatedEmployee: ElevatedEmployee = {
+  name: "Max",
+  privileges: ["create-server"],
+  startDate: new Date(),
+};
+```
+
+If used with Union Types, will apply the intersection of those two union types (what they have in common).
+
+```typescript
+type Combinable = string | number;
+type Numeric = number | boolean;
+
+type Universal = Combinable & Numeric; // Type: number
+```
+
+## Type Guards
+
+For Intersection Types when used with Union Types to define the correct type to be used.
+This way, we can stay flexible but keep type safety at runtime.
+
+Type Guarding can be done with:
+
+- `typeof` operator
+- `in` operator
+- `instanceof` operator (only for class objects, not interfaces)
+
+## Discriminated Unions
+
+Discriminated unions, also known as **tagged unions** or **algebraic data types**, are a pattern in TypeScript used to handle multiple types in a type-safe manner. They are a combination of **union types and type guards**, where each type in the union has a **common property (the discriminant)** that distinguishes it from the other types. This common property allows TypeScript to narrow down the type and provide type safety. This property is usually assigned a literal type to give it an identity.
+
+Also works for interfaces.
+
+## Type Casting
+
+Type casting in TypeScript is a way to explicitly tell the compiler to treat a variable as a different type. This is useful when you know more about the type of a variable than TypeScript does. Type casting can help you avoid type errors and make your code more flexible.
+
+## Function Overloads
+
+# TypeScript special characters
+
+## `!`
+
+- put at the end of a variable
+- tells TypeScript that it will never yield `null`
+- usually used on DOM elements
+
+```typescript
+const userInputElement = document.getElementById(
+  "user-input"
+)! as HTMLInputElement;
+```
+
+- alternatively, if not sure about the variable, use `if` check
+
+```typescript
+// truthy check (not null)
+if (userInputElement) {
+  (userInputElement as HTMLInputElement).value = "Hi!";
+}
+```
+
+Example 2:
+
+```typescript
+// "!"" tells TS that button will never be null
+const button = document.querySelector("button")! as HTMLButtonElement;
+
+// alternative to "!" above
+if (button) {
+  button.addEventListener("click", () => {
+    console.log("clicked!");
+    window.alert("You clicked me! :)");
+  });
+}
+```

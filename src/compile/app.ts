@@ -1,8 +1,9 @@
-const button = document.querySelector("button")!; // ! tells TS that button will never be null
+const button = document.querySelector("button")! as HTMLButtonElement; // "!"" tells TS that button will never be null
 
-// if (button) { // ! type check not necessary if runtime check is done
-button.addEventListener("click", () => {
-  console.log("clicked!");
-  window.alert("You clicked me! :)");
-});
-// }
+// alternative to "!" above
+if (button) {
+  button.addEventListener("click", () => {
+    console.log("clicked!");
+    window.alert("You clicked me! :)");
+  });
+}
