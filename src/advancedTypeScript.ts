@@ -149,25 +149,73 @@ moveAnimal({ type: "bird", flyingSpeed: 10 });
 
 // Type Casting
 
-const paragraph = document.querySelector("p"); // knows it's a HTML <p> Element
-const paragraph2 = document.getElementById("message-output"); // knows only it's a HTML Element
+// const paragraph = document.querySelector("p"); // knows it's a HTML <p> Element
+// const paragraph2 = document.getElementById("message-output"); // knows only it's a HTML Element
 
-const userInputElement = document.getElementById("user-input"); // need to tell TypeScript that it's an Input Element
+// const userInputElement = document.getElementById("user-input"); // need to tell TypeScript that it's an Input Element
 // userInputElement.value = "Hi!"; // Error: Property 'value' does not exist on type 'HTMLElement'
 
 /* Type Casting Version 1 - 
 using the angle brackets before the variable name 
 (HTMLInputElement is globally available because of the lib.dom in tsconfig.json) 
 */
-const userInputElement2 = <HTMLInputElement>(
-  document.getElementById("user-input")
-);
-userInputElement2.value = "Hi!"; // Error: Property 'value' does not exist on type 'HTMLElement'
+// const userInputElement2 = <HTMLInputElement>(
+//   document.getElementById("user-input")
+// );
+// userInputElement2.value = "Hi!"; // Error: Property 'value' does not exist on type 'HTMLElement'
 
 /* Type Casting Version 2 - 
 using the as keyword at the end of the variable name
 */
-const userInputElement3 = document.getElementById(
-  "user-input"
-) as HTMLInputElement;
-userInputElement3.value! = "Hi!";
+// const userInputElement3 = document.getElementById(
+//   "user-input"
+// ) as HTMLInputElement;
+// userInputElement3.value! = "Hi!";
+
+// Index Properties
+
+interface ErrorContainer {
+  // { email: 'Not a valid email', username: 'Must start with a character' }
+  [property: string]: string; // every property added must be a string and the value must be a string
+  // id: number; // will throw error because all properties have to be string
+  id: string;
+}
+
+const errorBag: ErrorContainer = {
+  email: "Not a valid email",
+  username: "Must start with a character",
+  id: "123",
+};
+
+// Function Overloads
+
+type Combinable2 = string | number;
+type Numeric2 = number | boolean;
+type Universal2 = Combinable2 & Numeric2;
+
+function add2(a: Combinable2, b: Combinable2) {
+  if (typeof a === "string" || typeof b === "string") {
+    return a.toString() + b.toString();
+  }
+  return a + b;
+}
+
+const result = add2("10", "5") as string; // without typecasting TypeScript assigns type string | number and the below .split() function won't work
+result.split("0");
+
+function add3(a: number, b: number): number; // Overload 1 - if two numbers are passed in return a number
+function add3(a: string, b: string): string; // Overload 2 - if two strings are passed in return a string
+function add3(a: string, b: number): string; // Overload 3 - if a string and a number are passed in return a string
+function add3(a: Combinable2, b: Combinable2) {
+  if (typeof a === "string" || typeof b === "string") {
+    return a.toString() + b.toString();
+  }
+  return a + b;
+}
+
+const result3 = add3("1", "5");
+result3.split("0"); // works now because TypeScript can infer the return type from the overload depending on what types are being passed in (two strings)
+
+const result4 = add3("1", 4); // "14"
+
+// Optional Chaining

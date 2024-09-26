@@ -731,7 +731,17 @@ Also works for interfaces.
 
 Type casting in TypeScript is a way to explicitly tell the compiler to treat a variable as a different type. This is useful when you know more about the type of a variable than TypeScript does. Type casting can help you avoid type errors and make your code more flexible.
 
+## Index Properties
+
+Index properties in TypeScript allow you to define properties of an object with dynamic keys. They enable you to specify the type of keys and the type of values that those keys can have. This is useful when you need to work with objects that have a flexible or unknown set of properties, ensuring type safety while accessing or manipulating these properties.
+
 ## Function Overloads
+
+Function overloads in TypeScript allow you to define multiple signatures for a single function. This enables the function to handle different types of input parameters and return types, providing type safety and better code readability. The implementation of the function must handle all the defined overloads.
+
+![example of what a function overload looks like](functionOverload.png)
+
+## Optional Chaining
 
 # TypeScript special characters
 
