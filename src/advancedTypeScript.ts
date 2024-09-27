@@ -219,3 +219,20 @@ result3.split("0"); // works now because TypeScript can infer the return type fr
 const result4 = add3("1", 4); // "14"
 
 // Optional Chaining
+
+const fetchedUserData = {
+  id: "u1",
+  name: "Ria",
+  // job: { title: "CEO", description: "My own company" },
+  job: { description: "My own company" },
+};
+
+// console.log(fetchedUserData.job.title); // may not always exist on fetched data from a server
+// console.log(fetchedUserData.job && fetchedUserData.job.title); // JavaScript way to check if job exists before accessing title, will return undefined (at least no runtime error)
+// TypeScript way to check if job exists before accessing title (using the Optional Chaining Operator "?")
+// console.log(fetchedUserData?.job?.title); // if job exists, then access title, if not return undefined
+if ("title" in fetchedUserData.job) {
+  console.log(fetchedUserData.job.title);
+} else {
+  console.log("No Job title found");
+}

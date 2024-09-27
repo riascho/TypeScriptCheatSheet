@@ -743,6 +743,11 @@ Function overloads in TypeScript allow you to define multiple signatures for a s
 
 ## Optional Chaining
 
+Optional chaining is a feature in TypeScript that allows you to safely access deeply nested properties of an object without having to explicitly check if each property in the chain exists. It uses the `?.` operator to short-circuit and return `undefined` if any part of the chain is `null` or `undefined`. This helps prevent runtime errors when accessing properties that may not exist.
+Optional chaining is supported in TypeScript version **3.7** and later.
+
+_NOTE:_ `?.` only checks for whether the value on the left of it is null or undefined - not any of the subsequent properties.
+
 # TypeScript special characters
 
 ## `!`
