@@ -806,3 +806,14 @@ if (button) {
   });
 }
 ```
+
+# TypeScript Generics
+
+Generics in TypeScript allow you to create reusable components that can work with a variety of data types while maintaining type safety. They enable you to define functions, classes, and interfaces that can operate on different types specified as parameters, providing flexibility and reusability in your code. Generics help in writing more generalized and abstract code without sacrificing the benefits of type checking.
+
+These built-in generics help ensure type safety and provide a consistent way to work with collections and asynchronous operations in TypeScript.
+
+Some of the most commonly used built-in generics in TypeScript include:
+
+- `Array<T>`: Represents an array of elements of type T.
+- `Promise<T>`: Represents a promise that resolves to a value of type T.
