@@ -1,4 +1,18 @@
-# TypeScript Basics
+# Introduction
+
+This is my personal study guide and cheat sheet for understanding and utilizing TypeScript. I put it together while completing the [Understanding TypeScript](https://www.udemy.com/course/understanding-typescript/) course on Udemy.
+
+<img src="typescript.webp" alt="intro picture" height="150">
+
+# Table of Content
+
+- **[Basics](#typescript-basics)**
+- **[Classes](#typescript-classes)**
+- **[Interfaces](#typescript-interfaces)**
+- **[Advanced](#typescript---advanced)**
+- **[Special Characters](#typescript-special-characters)**
+
+# [TypeScript Basics](./src/basics.ts)
 
 - download via `npm install -g typescript`
 - type checking at compile time, whereas JavaScript only gets type errors at run time
@@ -8,8 +22,6 @@
 - after `tsconfig.json` is set up, you can simply run `tsc` (or `tsc -w` with watch mode) to compile your whole project
 - `include` or `exclude` files or directories for compilation (as an array) in `tsconfig.json` after the `"compilerOptions"`
 - use the directories `src` (typescript files) and `dist` (javascript files) for bigger projects. Specify these in `rootDir` (input) and `outDir` (output) respectively in the `tsconfig.json` for the TypeScript compilation.
-
-see [basics.ts](./src/basics.ts)
 
 ### TypeScript Type Check
 
@@ -116,9 +128,7 @@ E.g. `role` would be inferred as a simple `(number | string)[]` but if we want i
 const role: [number, string] = [2, "admin"];
 ```
 
-## Enums
-
-see [enums.ts](./src/enums.ts)
+## [Enums](./src/enums.ts)
 
 Type only available in TypeScript. By default assigns numbers (from 0) to given labels. These properties can be accessed and assigned via dot notation. Enums are usually declared in uppercase.
 
@@ -187,9 +197,7 @@ function isOlder(user: User, checkAge: number) {
 }
 ```
 
-## Function Types
-
-see [functions.ts](./src/functions.ts)
+## [Function Types](./src/functions.ts)
 
 In general it is best left to TypeScript to infer the type that is returned from a function. The return type `: void` indicates the function does not return anything (`return` keyword is not used). The type `: undefined` can be used when the function has a `return` statement but no value.
 e.g.
@@ -286,9 +294,7 @@ generateError("An error occurred!", 500);
 
 # TypeScript Classes
 
-see [classes.ts](./src/classes.ts)
-
-## Class Declaration
+## [Class Declaration](./src/classes.ts)
 
 In TypeScript, classes are declared using the `class` keyword followed by the class name. By convention, class names are capitalized.
 
@@ -656,9 +662,7 @@ console.log(kitchen2);
 // both will log " Kitchen { name: 'Ikea' } "
 ```
 
-# TypeScript Interfaces
-
-see [interfaces.ts](./src/interfaces.ts)
+# [TypeScript Interfaces](./src/interfaces.ts)
 
 Interfaces are used to define the structure of objects. It specifies the properties and methods that an object must have, but it does not provide implementations for those methods.
 Interfaces are used to define the shape of data and to enforce type checking at compile time.
@@ -675,9 +679,7 @@ Interfaces are used to define the shape of data and to enforce type checking at 
 
 # TypeScript - Advanced
 
-see [advancedTypeScript.ts](./src/advancedTypeScript.ts)
-
-## Intersection Types
+## [Intersection Types](./src/advancedTypeScript.ts)
 
 Related to Interface Inheritance. Ability to combine types.
 
@@ -710,7 +712,7 @@ type Numeric = number | boolean;
 type Universal = Combinable & Numeric; // Type: number
 ```
 
-## Type Guards
+## [Type Guards](./src/advancedTypeScript.ts#L46)
 
 For Intersection Types when used with Union Types to define the correct type to be used.
 This way, we can stay flexible but keep type safety at runtime.
@@ -721,32 +723,51 @@ Type Guarding can be done with:
 - `in` operator
 - `instanceof` operator (only for class objects, not interfaces)
 
-## Discriminated Unions
+## [Discriminated Unions](./src/advancedTypeScript.ts#L112)
 
 Discriminated unions, also known as **tagged unions** or **algebraic data types**, are a pattern in TypeScript used to handle multiple types in a type-safe manner. They are a combination of **union types and type guards**, where each type in the union has a **common property (the discriminant)** that distinguishes it from the other types. This common property allows TypeScript to narrow down the type and provide type safety. This property is usually assigned a literal type to give it an identity.
 
 Also works for interfaces.
 
-## Type Casting
+## [Type Casting](./src/advancedTypeScript.ts#L150)
 
-Type casting in TypeScript is a way to explicitly tell the compiler to treat a variable as a different type. This is useful when you know more about the type of a variable than TypeScript does. Type casting can help you avoid type errors and make your code more flexible.
+Type casting in TypeScript is a way to explicitly tell the compiler to treat a variable as a different type. This is useful when you know more about the type of a variable than TypeScript does. Type casting can be done with either angel brackets `<Type>` or using the `as` keyword.
 
-## Index Properties
+```typescript
+let value1: unknown = "hello";
+let length1: number = (<string>value1).length;
+
+let value2: unknown = "hi there";
+let length2: number = (value2 as string).length;
+```
+
+## [Index Properties](./src/advancedTypeScript.ts#L175)
 
 Index properties in TypeScript allow you to define properties of an object with dynamic keys. They enable you to specify the type of keys and the type of values that those keys can have. This is useful when you need to work with objects that have a flexible or unknown set of properties, ensuring type safety while accessing or manipulating these properties.
 
-## Function Overloads
+## [Function Overloads](./src/advancedTypeScript.ts#L190)
 
 Function overloads in TypeScript allow you to define multiple signatures for a single function. This enables the function to handle different types of input parameters and return types, providing type safety and better code readability. The implementation of the function must handle all the defined overloads.
 
 ![example of what a function overload looks like](functionOverload.png)
 
-## Optional Chaining
+## [Optional Chaining](./src/advancedTypeScript.ts#L221)
 
 Optional chaining is a feature in TypeScript that allows you to safely access deeply nested properties of an object without having to explicitly check if each property in the chain exists. It uses the `?.` operator to short-circuit and return `undefined` if any part of the chain is `null` or `undefined`. This helps prevent runtime errors when accessing properties that may not exist.
 Optional chaining is supported in TypeScript version **3.7** and later.
 
 _NOTE:_ `?.` only checks for whether the value on the left of it is null or undefined - not any of the subsequent properties.
+
+## [Nullish Coalescing](./src/advancedTypeScript.ts#L240)
+
+The nullish coalescing operator `??` in TypeScript is used to provide a default value when dealing with null or undefined. It returns the right-hand operand when the left-hand operand is **null or undefined**, and otherwise returns the left-hand operand. This operator is useful for handling cases where a value might be missing or not initialized.
+The nullish coalescing operator is supported in TypeScript version **3.7** and later.
+
+```typescript
+const userInput = 0; // this is not null or undefined but a falsy value!
+const storedData = userInput || "DEFAULT"; // "DEFAULT"
+const storedData = userInput ?? "DEFAULT"; // 0
+```
 
 # TypeScript special characters
 

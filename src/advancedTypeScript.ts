@@ -149,28 +149,28 @@ moveAnimal({ type: "bird", flyingSpeed: 10 });
 
 // Type Casting
 
-// const paragraph = document.querySelector("p"); // knows it's a HTML <p> Element
-// const paragraph2 = document.getElementById("message-output"); // knows only it's a HTML Element
+const paragraph = document.querySelector("p"); // knows it's a HTML <p> Element
+const paragraph2 = document.getElementById("message-output"); // knows only it's a HTML Element
 
-// const userInputElement = document.getElementById("user-input"); // need to tell TypeScript that it's an Input Element
+const userInputElement = document.getElementById("user-input"); // need to tell TypeScript that it's an Input Element
 // userInputElement.value = "Hi!"; // Error: Property 'value' does not exist on type 'HTMLElement'
 
 /* Type Casting Version 1 - 
 using the angle brackets before the variable name 
 (HTMLInputElement is globally available because of the lib.dom in tsconfig.json) 
 */
-// const userInputElement2 = <HTMLInputElement>(
-//   document.getElementById("user-input")
-// );
-// userInputElement2.value = "Hi!"; // Error: Property 'value' does not exist on type 'HTMLElement'
+const userInputElement2 = <HTMLInputElement>(
+  document.getElementById("user-input")
+);
+userInputElement2.value = "Hi!";
 
 /* Type Casting Version 2 - 
 using the as keyword at the end of the variable name
 */
-// const userInputElement3 = document.getElementById(
-//   "user-input"
-// ) as HTMLInputElement;
-// userInputElement3.value! = "Hi!";
+const userInputElement3 = document.getElementById(
+  "user-input"
+) as HTMLInputElement;
+userInputElement3.value! = "Hi!";
 
 // Index Properties
 
@@ -236,3 +236,15 @@ if ("title" in fetchedUserData.job) {
 } else {
   console.log("No Job title found");
 }
+
+// Nullish Coalescing
+
+const userInput = null; // fetched from an API, where uncertain if it's null or falsy (e.g. empty string "")
+const userInput2 = "";
+// one way to handle this with the OR operator (if userInput is null or falsy, then "DEFAULT" will be used)
+const storedData = userInput2 || "DEFAULT";
+console.log(storedData); // "DEFAULT"
+
+// if you want to exclusively check for null or undefined, you can use the Nullish Coalescing Operator "??"
+const storedData2 = userInput2 ?? "DEFAULT";
+console.log(storedData2); // empty string ""
