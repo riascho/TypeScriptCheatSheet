@@ -748,6 +748,17 @@ Optional chaining is supported in TypeScript version **3.7** and later.
 
 _NOTE:_ `?.` only checks for whether the value on the left of it is null or undefined - not any of the subsequent properties.
 
+## Nullish Coalescing
+
+The nullish coalescing operator `??` in TypeScript is used to provide a default value when dealing with null or undefined. It returns the right-hand operand when the left-hand operand is **null or undefined**, and otherwise returns the left-hand operand. This operator is useful for handling cases where a value might be missing or not initialized.
+The nullish coalescing operator is supported in TypeScript version **3.7** and later.
+
+```typescript
+const userInput = 0; // this is not null or undefined but a falsy value!
+const storedData = userInput || "DEFAULT"; // "DEFAULT"
+const storedData = userInput ?? "DEFAULT"; // 0
+```
+
 # TypeScript special characters
 
 ## `!`

@@ -236,3 +236,15 @@ if ("title" in fetchedUserData.job) {
 } else {
   console.log("No Job title found");
 }
+
+// Nullish Coalescing
+
+const userInput = null; // fetched from an API, where uncertain if it's null or falsy (e.g. empty string "")
+const userInput2 = "";
+// one way to handle this with the OR operator (if userInput is null or falsy, then "DEFAULT" will be used)
+const storedData = userInput2 || "DEFAULT";
+console.log(storedData); // "DEFAULT"
+
+// if you want to exclusively check for null or undefined, you can use the Nullish Coalescing Operator "??"
+const storedData2 = userInput2 ?? "DEFAULT";
+console.log(storedData2); // empty string ""
