@@ -11,6 +11,7 @@ This is my personal study guide and cheat sheet for understanding and utilizing 
 - **[Interfaces](#typescript-interfaces)**
 - **[Advanced](#typescript---advanced)**
 - **[Special Characters](#typescript-special-characters)**
+- **[Generics](#typescript-generics)**
 
 # [TypeScript Basics](./src/basics.ts)
 
@@ -807,7 +808,7 @@ if (button) {
 }
 ```
 
-# TypeScript Generics
+# [TypeScript Generics](./src/generics.ts)
 
 Generics in TypeScript allow you to create reusable components that can work with a variety of data types while maintaining type safety. They enable you to define functions, classes, and interfaces that can operate on different types specified as parameters, providing flexibility and reusability in your code. Generics help in writing more generalized and abstract code without sacrificing the benefits of type checking.
 
@@ -817,3 +818,36 @@ Some of the most commonly used built-in generics in TypeScript include:
 
 - `Array<T>`: Represents an array of elements of type T.
 - `Promise<T>`: Represents a promise that resolves to a value of type T.
+
+## Syntax
+
+The general syntax for generics involves using angle brackets `< >` to specify type parameters. These type parameters act as placeholders for the actual types that will be used when the function, class, or interface is instantiated. These type parameters conventionally use single upper case letters `<T>`, sometimes also whole words `<Type>`.
+
+```typescript
+function someFunction<Type1, Type2>(arg1: Type1, arg2: Type2): Type1 & Type2 {
+  // some logic
+}
+```
+
+A generic function can accept one or more type parameters (`Type1`, `Type2`).
+It returns a value of type `Type1 & Type2`, which represents the intersection of the two types. This means that the returned value should have all the properties of both Type1 and Type2.
+
+These types are only defined when the function is called. And hence, you can specify the type explicitly or let TypeScript infer it.
+
+```typescript
+let output = someFunction<string, string>("Hello", "World!"); // Explicit type
+let inferredOutput = someFunction("Hello", "World!"); // TypeScript infers the type
+```
+
+## [Type Constraints](./src/generics.ts#L44)
+
+While generic types can be very flexible, **Type Constraints** help to define at least the broader context of this generic type.
+
+```typescript
+function someFunction<Type1 extends string, Type2 extends number>(
+  arg1: Type1,
+  arg2: Type2
+): Type1 & Type2 {
+  // some logic
+}
+```
