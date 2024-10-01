@@ -851,3 +851,21 @@ function someFunction<Type1 extends string, Type2 extends number>(
   // some logic
 }
 ```
+
+### [`keyof` constraint](./src/generics.ts#L81)
+
+The `keyof` constraint in TypeScript is used to create a type that represents the keys of another type. This is particularly useful when you want to ensure that a function parameter is a valid key of an object.
+
+```typescript
+const object1 = { name: "Ria", age: 34 };
+
+function extractAndConvert<T extends object, U extends keyof T>(
+  obj: T,
+  key: U
+): string {
+  return "Value: " + obj[key];
+}
+
+console.log(extractAndConvert(object1, "name")); // no error
+console.log(extractAndConvert(object1, "hobbies")); // will throw error: Argument of type '"hobbies"' is not assignable to parameter of type '"name" | "age"'.
+```
