@@ -810,7 +810,9 @@ if (button) {
 
 # [TypeScript Generics](./src/generics.ts)
 
-Generics in TypeScript allow you to create reusable components that can work with a variety of data types while maintaining type safety. They enable you to define functions, classes, and interfaces that can operate on different types specified as parameters, providing flexibility and reusability in your code. Generics help in writing more generalized and abstract code without sacrificing the benefits of type checking.
+Generics in TypeScript allow you to create reusable components that can work with a variety of data types while maintaining type safety. They enable you to define **functions**, **classes**, and **interfaces** that can operate on different types specified as parameters, providing flexibility and reusability in your code. Generics help in writing more generalized and abstract code without sacrificing the benefits of type checking.
+
+Generic Types are specified upon function calling or object instantiation and maintain that very type throughout.
 
 These built-in generics help ensure type safety and provide a consistent way to work with collections and asynchronous operations in TypeScript.
 
@@ -874,3 +876,22 @@ console.log(extractAndConvert(object1, "hobbies")); // will throw error: Argumen
 
 Use generic types in class definitions to provide flexibility but yet type safety, so that when these classes are instantiated, they will adhere to the type that was used to call the class object. This makes it then type consistent when using that class object.
 Use constraints to increase type safety when needed.
+
+## [Generic Utility Types](./src/generics.ts#L154)
+
+Generic Utility Types are special built-in types, that are placed in front of any generic type `<T>` and enhance their functionality.
+Some of these are:
+
+- `Partial` - takes an object type and returns a new type with all properties of the original type set to optional.
+- `Readonly` (not `ReadOnly`) - takes any type and returns a new type with all properties of the original type set to read-only.
+
+```typescript
+type Constellation = {
+  planet: string;
+  moon: string;
+};
+
+const fixedObject: Readonly<Constellation> = { planet: "Earth", moon: "Moon" };
+
+fixedObject.planet = "Mars"; // error: Cannot assign to 'planet' because it is a read-only property
+```

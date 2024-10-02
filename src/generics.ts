@@ -99,7 +99,7 @@ console.log(extractAndConvert({ name: "Ria" }, "name")); //   Value: Ria
 // Generic Classes
 
 // If we do not care about the type but want to make sure that whatever type is the class is instantiated with is consistent.
-class DataStorage<T extends string | number | boolean> {
+class DataStorage<T extends string | number | boolean | Date> {
   // we constrain our T type to only accept primitive data types (so that no objects or arrays are passed in, as they cannot be modified correctly with the indexOf() function)
   private data: T[] = [];
 
@@ -133,3 +133,59 @@ numberStorage.addItems(18, 23, 45, 16, 78); // this works
 console.log(numberStorage.getItems());
 numberStorage.removeItems(23, 45);
 console.log(numberStorage.getItems());
+
+// const objectStorage = new DataStorage<object>(); // Type 'object' does not satisfy the constraint 'string | number | boolean'.ts(2344)
+// const obj1 = { name: "Ria" };
+// objectStorage.addItems(obj1);
+// objectStorage.addItems({ name: "Ben" });
+// console.log(objectStorage.getItems());
+// objectStorage.removeItems(obj1); // this would not actually remove obj1 from the array, because the reference to the object is different
+// console.log(objectStorage.getItems());
+
+const today = new Date();
+const yesterday = today.getDate() - 1;
+const tomorrow = today.getDate() + 1;
+
+const dateStorage = new DataStorage();
+dateStorage.addItems(today, yesterday, tomorrow);
+dateStorage.removeItems(today);
+console.log(dateStorage.getItems());
+
+// Generic Utility Types
+
+interface CourseGoal {
+  title: string;
+  description: string;
+  completeUntil: Date;
+}
+
+// Partial
+
+function createCourseGoal(
+  title: string,
+  description: string,
+  date: Date
+): CourseGoal {
+  let courseGoal: Partial<CourseGoal> = {}; // Partial tells TypeScript that this empty object {} will be a CourseGoal but makes all properties optional
+  courseGoal.title = title;
+  courseGoal.description = description;
+  courseGoal.completeUntil = date;
+  return courseGoal as CourseGoal; // need to cast it at the end because we want the return type to have all properties mandatory
+}
+
+// Readonly
+
+const fixedCoordinates: Readonly<number[]> = [123.45, 56.78];
+// fixedCoordinates[0] = 124; // error: Index signature in type 'readonly number[]' only permits reading
+
+// btw
+const fixedCoordinates2: [number, number] = [123.45, 56.78];
+fixedCoordinates2[0] = 124; // no error
+
+const course1: Readonly<CourseGoal> = {
+  title: "TypeScript Course",
+  description: "Learn TypeScript",
+  completeUntil: new Date(1081762356789),
+};
+
+// course1.completeUntil = new Date(1081762356789); // error: Cannot assign to 'completeUntil' because it is a read-only property
