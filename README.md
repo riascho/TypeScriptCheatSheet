@@ -11,6 +11,7 @@ This is my personal study guide and cheat sheet for understanding and utilizing 
 - **[Interfaces](#typescript-interfaces)**
 - **[Advanced](#typescript---advanced)**
 - **[Special Characters](#typescript-special-characters)**
+- **[Generics](#typescript-generics)**
 
 # [TypeScript Basics](./src/basics.ts)
 
@@ -806,3 +807,70 @@ if (button) {
   });
 }
 ```
+
+# [TypeScript Generics](./src/generics.ts)
+
+Generics in TypeScript allow you to create reusable components that can work with a variety of data types while maintaining type safety. They enable you to define functions, classes, and interfaces that can operate on different types specified as parameters, providing flexibility and reusability in your code. Generics help in writing more generalized and abstract code without sacrificing the benefits of type checking.
+
+These built-in generics help ensure type safety and provide a consistent way to work with collections and asynchronous operations in TypeScript.
+
+Some of the most commonly used built-in generics in TypeScript include:
+
+- `Array<T>`: Represents an array of elements of type T.
+- `Promise<T>`: Represents a promise that resolves to a value of type T.
+
+## Syntax
+
+The general syntax for generics involves using angle brackets `< >` to specify type parameters. These type parameters act as placeholders for the actual types that will be used when the function, class, or interface is instantiated. These type parameters conventionally use single upper case letters `<T>`, sometimes also whole words `<Type>`.
+
+```typescript
+function someFunction<Type1, Type2>(arg1: Type1, arg2: Type2): Type1 & Type2 {
+  // some logic
+}
+```
+
+A generic function can accept one or more type parameters (`Type1`, `Type2`).
+It returns a value of type `Type1 & Type2`, which represents the intersection of the two types. This means that the returned value should have all the properties of both Type1 and Type2.
+
+These types are only defined when the function is called. And hence, you can specify the type explicitly or let TypeScript infer it.
+
+```typescript
+let output = someFunction<string, string>("Hello", "World!"); // Explicit type
+let inferredOutput = someFunction("Hello", "World!"); // TypeScript infers the type
+```
+
+## [Type Constraints](./src/generics.ts#L44)
+
+While generic types can be very flexible, **Type Constraints** help to define at least the broader context of this generic type.
+
+```typescript
+function someFunction<Type1 extends string, Type2 extends number>(
+  arg1: Type1,
+  arg2: Type2
+): Type1 & Type2 {
+  // some logic
+}
+```
+
+### [`keyof` constraint](./src/generics.ts#L81)
+
+The `keyof` constraint in TypeScript is used to create a type that represents the keys of another type. This is particularly useful when you want to ensure that a function parameter is a valid key of an object.
+
+```typescript
+const object1 = { name: "Ria", age: 34 };
+
+function extractAndConvert<T extends object, U extends keyof T>(
+  obj: T,
+  key: U
+): string {
+  return "Value: " + obj[key];
+}
+
+console.log(extractAndConvert(object1, "name")); // no error
+console.log(extractAndConvert(object1, "hobbies")); // will throw error: Argument of type '"hobbies"' is not assignable to parameter of type '"name" | "age"'.
+```
+
+## [Generic Classes](./src/generics.ts#L99)
+
+Use generic types in class definitions to provide flexibility but yet type safety, so that when these classes are instantiated, they will adhere to the type that was used to call the class object. This makes it then type consistent when using that class object.
+Use constraints to increase type safety when needed.
