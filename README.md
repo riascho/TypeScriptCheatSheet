@@ -869,3 +869,8 @@ function extractAndConvert<T extends object, U extends keyof T>(
 console.log(extractAndConvert(object1, "name")); // no error
 console.log(extractAndConvert(object1, "hobbies")); // will throw error: Argument of type '"hobbies"' is not assignable to parameter of type '"name" | "age"'.
 ```
+
+## [Generic Classes](./src/generics.ts#L99)
+
+Use generic types in class definitions to provide flexibility but yet type safety, so that when these classes are instantiated, they will adhere to the type that was used to call the class object. This makes it then type consistent when using that class object.
+Use constraints to increase type safety when needed.

@@ -95,3 +95,41 @@ const object1 = { name: "Ria", age: 34 };
 // console.log(extractAndConvert({}, "name")); //   No index signature with a parameter of type 'string' was found on type '{}'.
 console.log(extractAndConvert({ name: "Ria" }, "name")); //   Value: Ria
 // console.log(extractAndConvert(object1, "hobbies")); // error
+
+// Generic Classes
+
+// If we do not care about the type but want to make sure that whatever type is the class is instantiated with is consistent.
+class DataStorage<T extends string | number | boolean> {
+  // we constrain our T type to only accept primitive data types (so that no objects or arrays are passed in, as they cannot be modified correctly with the indexOf() function)
+  private data: T[] = [];
+
+  addItems(...items: T[]) {
+    this.data.push(...items);
+  }
+
+  removeItems(...item: T[]) {
+    for (const i of item) {
+      if (this.data.indexOf(i) === -1) {
+        // if item is not found, indexOf returns -1 (which would otherwise remove the last item)
+        return;
+      }
+      this.data.splice(this.data.indexOf(i), 1); // indexof only works for primitive data types (not for objects or arrays!)
+    }
+  }
+
+  getItems() {
+    return [...this.data];
+  }
+}
+
+const textStorage = new DataStorage<string>(); // here we use generic type to be strings from now on
+textStorage.addItems("Ria", "Ben"); // this works
+// textStorage.addItems(18); // throws error because it's not a string
+
+const numberStorage = new DataStorage<number>(); // here we use generic type to be numbers from now on
+numberStorage.addItems(18, 23, 45, 16, 78); // this works
+// numberStorage.removeItems("Ria"); // throws error because it's not a number
+
+console.log(numberStorage.getItems());
+numberStorage.removeItems(23, 45);
+console.log(numberStorage.getItems());
