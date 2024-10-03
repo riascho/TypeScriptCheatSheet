@@ -36,7 +36,9 @@ Page = __decorate([
 ], Page);
 // using decorator to replace with class property
 function TemplateDecorator2(template, hookId) {
+    console.log("TEMPLATE FACTORY");
     return function (constructor) {
+        console.log("TEMPLATE DECORATOR");
         const hookElement = document.getElementById(hookId);
         const replacement = new constructor();
         if (hookElement) {
@@ -46,6 +48,12 @@ function TemplateDecorator2(template, hookId) {
         }
     };
 }
+function Logger(log) {
+    console.log("LOGGER FACTORY");
+    return function (_constructor) {
+        console.log("LOGGER DECORATOR " + log);
+    };
+}
 let Page2 = class Page2 {
     constructor() {
         this.title = "Welcome (Hook2)";
@@ -53,6 +61,19 @@ let Page2 = class Page2 {
     }
 };
 Page2 = __decorate([
+    Logger("Header Template"),
     TemplateDecorator2("<h1>Template Title</h1>", "hook2") // the "<h1>" template basically provides the initial h1 element that gets overwritten in the decorator function with h1.textContent
 ], Page2);
+/*
+Order of decorator execution:
+
+Console:
+
+1. LOGGER FACTORY
+2. TEMPLATE FACTORY
+3. TEMPLATE DECORATOR
+4. Creating Title Object...
+5. LOGGER DECORATOR Header Template
+
+*/
 //# sourceMappingURL=app.js.map

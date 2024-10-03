@@ -36,3 +36,47 @@ class Person2 {
     console.log("Creating Person Object...");
   }
 }
+
+// Property Decorators
+
+function Log(target: any, propertyName: string) {
+  console.log("Property Decorator");
+  console.log(target);
+  console.log(propertyName);
+}
+
+// can be applied to properties, accessors, and methods
+class Product {
+  // properties
+  @Log // refers to property below (target and propertyName)
+  title: string;
+  private _price: number;
+
+  constructor(title: string, price: number) {
+    this.title = title;
+    this._price = price;
+  }
+
+  // accessor
+  set price(value: number) {
+    if (value > 0) {
+      this._price = value;
+    } else {
+      throw new Error("Invalid Price - should be positive");
+    }
+  }
+
+  // method
+  getPriceWithTax(tax: number) {
+    return this._price * (1 + tax);
+  }
+}
+
+/* 
+This will log: 
+
+1. Property Decorator
+2. {}
+3. title
+
+*/

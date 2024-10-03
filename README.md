@@ -905,7 +905,7 @@ fixedObject.planet = "Mars"; // error: Cannot assign to 'planet' because it is a
 "experimentalDecorators": true
 ```
 
-- A TypeScript Decorator is a function that can add additional behavior or metadata to a class. This can be useful for debugging, logging, or other cross-cutting concerns.
+- A TypeScript Decorator is a function that can add additional behavior or metadata to a **class**. This can be useful for debugging, logging, or other cross-cutting concerns.
 
 - Usually these Decorator functions start with an upper case letter by convention.
 
@@ -934,3 +934,58 @@ class Person {}
 - Decorator factories are invoked with the desired parameters and then return the actual decorator function that will be applied to the target element.
 
 - See an example for using decorators with the DOM in [app.ts](./src/compile/app.ts#L11)
+
+## [Multiple Decorators](./src/compile/app.ts#L53)
+
+In TypeScript, multiple decorators can be applied to a single class, method, property, or parameter. When multiple decorators are used, they are called in a specific order, which is important to understand for predicting their behavior.
+
+**Order of Execution**
+
+If multiple class decorators are applied, first the **decorator factories** are executed _top to bottom_ and then the actual **decorators** in reverse order (_bottom to top_).
+
+```typescript
+function First() {
+  console.log("First factory");
+  return function (_target: any) {
+    console.log("First decorator");
+  };
+}
+
+function Second() {
+  console.log("Second factory");
+  return function (_target: any) {
+    console.log("Second decorator");
+  };
+}
+
+@First()
+@Second()
+class Example {
+  method() {
+    console.log("Method execution");
+  }
+}
+
+const example = new Example();
+example.method();
+```
+
+This will log:
+
+```typescript
+// First factory
+// Second factory
+// Second decorator
+// First decorator
+// Method execution
+```
+
+## [Property Decorators](./src/decorators.ts#L40)
+
+- Property Decorators need two arguments, depending on where they're being used (a `target` to apply to, and the `property name`)
+- Are executed when class is defined (not when instantiated)!
+- These decorators are evaluated and executed in the same order as they appear (_top to bottom_).
+
+## [Accessor & Parameter Decorators](./src/decorators.ts#L40)
+
+- These decorators are evaluated and executed in the same order as they appear (_left to right_ for parameters).
