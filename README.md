@@ -12,6 +12,7 @@ This is my personal study guide and cheat sheet for understanding and utilizing 
 - **[Advanced](#typescript---advanced)**
 - **[Special Characters](#typescript-special-characters)**
 - **[Generics](#typescript-generics)**
+- **[Decorators](#typescript-decorators)**
 
 # [TypeScript Basics](./src/basics.ts)
 
@@ -895,3 +896,41 @@ const fixedObject: Readonly<Constellation> = { planet: "Earth", moon: "Moon" };
 
 fixedObject.planet = "Mars"; // error: Cannot assign to 'planet' because it is a read-only property
 ```
+
+# [TypeScript Decorators](./src/decorators.ts)
+
+- In order to use Decorators, they need to be activated in the `tsconfig` file
+
+```
+"experimentalDecorators": true
+```
+
+- A TypeScript Decorator is a function that can add additional behavior or metadata to a class. This can be useful for debugging, logging, or other cross-cutting concerns.
+
+- Usually these Decorator functions start with an upper case letter by convention.
+
+- They can be applied to classes by using the `@` symbol placing them immediately before the class definition without the parantheses (only pointing to the function, not calling it)
+
+```typescript
+@Logger
+class Person {}
+```
+
+- Decorator functions need arguments because they provide context about the element they are decorating. When a decorator is applied to a class, method, property, or parameter, TypeScript passes specific arguments to the decorator function, allowing it to modify or enhance the behavior of the target element.
+
+- Decorators execute at the time of when a class is defined, not when the class is instantiated.
+
+## [Decorator Factories](./src/decorators.ts#L21)
+
+- Decorator factories in TypeScript are functions that return decorator functions that can be configured when assigned to a class.
+
+- They are applied to a class with parantheses, allowing to pass in parameters. This allows for customizing the values the decorator uses when it executes.
+
+```typescript
+@LoggerFactory("LOGGING - PERSON")
+class Person {}
+```
+
+- Decorator factories are invoked with the desired parameters and then return the actual decorator function that will be applied to the target element.
+
+- See an example for using decorators with the DOM in [app.ts](./src/compile/app.ts#L11)
