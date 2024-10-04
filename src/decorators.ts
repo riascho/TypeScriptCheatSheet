@@ -1,4 +1,4 @@
-// First Class Decorator
+// Class Decorator
 
 // this function is a decorator
 function Logger(target: Function) {
@@ -37,18 +37,47 @@ class Person2 {
   }
 }
 
-// Property Decorators
+// Other Decorators
 
-function Log(target: any, propertyName: string) {
+function PropertyLog(target: any, propertyName: string) {
   console.log("Property Decorator");
   console.log(target);
   console.log(propertyName);
 }
 
+function AccessorLog(
+  target: any,
+  accessorName: string,
+  propertyDescriptor: PropertyDescriptor
+) {
+  console.log("Accessor Decorator");
+  console.log(target);
+  console.log(accessorName);
+  console.log(propertyDescriptor);
+}
+
+function MethodLog(
+  target: any,
+  methodName: string,
+  propertyDescriptor: PropertyDescriptor
+) {
+  console.log("Method Decorator");
+  console.log(target);
+  console.log(methodName);
+  console.log(propertyDescriptor);
+}
+
+function ParameterLog(target: any, methodName: string, position: number) {
+  console.log("Parameter Decorator");
+  console.log(target);
+  console.log(methodName);
+  console.log(position);
+}
+
 // can be applied to properties, accessors, and methods
 class Product {
   // properties
-  @Log // refers to property below (target and propertyName)
+  @PropertyLog // refers to property below (target and propertyName)
   title: string;
   private _price: number;
 
@@ -58,6 +87,7 @@ class Product {
   }
 
   // accessor
+  @AccessorLog
   set price(value: number) {
     if (value > 0) {
       this._price = value;
@@ -67,16 +97,18 @@ class Product {
   }
 
   // method
-  getPriceWithTax(tax: number) {
+  @MethodLog
+  getPriceWithTax(@ParameterLog tax: number) {
     return this._price * (1 + tax);
   }
 }
 
 /* 
-This will log: 
+Order of Execution: 
 
 1. Property Decorator
-2. {}
-3. title
+2. Access Decorator
+3. Parameter Decorator
+4. Method Decorator
 
 */

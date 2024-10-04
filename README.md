@@ -905,26 +905,30 @@ fixedObject.planet = "Mars"; // error: Cannot assign to 'planet' because it is a
 "experimentalDecorators": true
 ```
 
-- A TypeScript Decorator is a function that can add additional behavior or metadata to a **class**. This can be useful for debugging, logging, or other cross-cutting concerns.
+- A TypeScript Decorator is a function that can add additional behavior or metadata to a class, property, method or parameter (=targets). This can be useful for debugging, logging, or other cross-cutting concerns.
 
 - Usually these Decorator functions start with an upper case letter by convention.
 
-- They can be applied to classes by using the `@` symbol placing them immediately before the class definition without the parantheses (only pointing to the function, not calling it)
+- They can be applied by using the `@` symbol placing them immediately before the target definition without the parantheses (only pointing to the function, not calling it)
+
+- Decorator functions need arguments because they provide context about the element they are decorating. When a decorator is applied to a class, method, property, or parameter, TypeScript passes specific arguments to the decorator function, allowing it to modify or enhance the behavior of the target element.
+
+- Decorators execute at the time of when a class is defined, not when the class is instantiated.
+
+## [Class Decorators](./src/decorators.ts#L10)
 
 ```typescript
 @Logger
 class Person {}
 ```
 
-- Decorator functions need arguments because they provide context about the element they are decorating. When a decorator is applied to a class, method, property, or parameter, TypeScript passes specific arguments to the decorator function, allowing it to modify or enhance the behavior of the target element.
-
-- Decorators execute at the time of when a class is defined, not when the class is instantiated.
+- Class Decorator are decorator functions applied to the class at time of definition
 
 ## [Decorator Factories](./src/decorators.ts#L21)
 
-- Decorator factories in TypeScript are functions that return decorator functions that can be configured when assigned to a class.
+- Decorator factories are functions that return decorator functions that can be configured when assigned to a class.
 
-- They are applied to a class with parantheses, allowing to pass in parameters. This allows for customizing the values the decorator uses when it executes.
+- They are applied to a class with parantheses, allowing to pass in arguments. This allows for customizing the values the decorator uses when it executes.
 
 ```typescript
 @LoggerFactory("LOGGING - PERSON")
@@ -941,7 +945,7 @@ In TypeScript, multiple decorators can be applied to a single class, method, pro
 
 **Order of Execution**
 
-If multiple class decorators are applied, first the **decorator factories** are executed _top to bottom_ and then the actual **decorators** in reverse order (_bottom to top_).
+If multiple class decorators are applied, first the **decorator factories** are executed _top to bottom_ and then the actual **class decorators** in reverse order (_bottom to top_).
 
 ```typescript
 function First() {
@@ -980,12 +984,29 @@ This will log:
 // Method execution
 ```
 
-## [Property Decorators](./src/decorators.ts#L40)
+## [Property Decorators](./src/decorators.ts#L42)
 
-- Property Decorators need two arguments, depending on where they're being used (a `target` to apply to, and the `property name`)
+- Property Decorators need 2 arguments, depending on where they're being used (a `target` to apply to and the `property name`)
 - Are executed when class is defined (not when instantiated)!
+- Property decorators are evaluated and executed in the same order as they appear (_top to bottom_).
+
+## [Accessor/Method Decorators](./src/decorators.ts#L48)
+
+- Accessor Decorators and Method Decorators need 3 arguments (a `target` to apply to, the `name` and the [`descriptor`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty))
 - These decorators are evaluated and executed in the same order as they appear (_top to bottom_).
 
-## [Accessor & Parameter Decorators](./src/decorators.ts#L40)
+## [Parameter Decorators](./src/decorators.ts#L70)
 
+- Parameter Decorators need 3 arguments (a `target` to apply to, the `method name` it belongs to and the `position` of this argument)
 - These decorators are evaluated and executed in the same order as they appear (_left to right_ for parameters).
+
+## [Return Values](./src/compile/app.ts#L78)
+
+Decorator Functions can return things as well. For example return another class that extends on the decorated class -> this produces the effect that a decorator may execute certain logic (from the class!) but at the time of class instantiation rather than class definition.
+The following decorator functions can return something:
+
+- `Class Decorators` - class or constructor
+- `Method Decorators` - descriptors
+- `Access Decorators` - descriptors
+
+Any return values on `Property Decorators` or `Parameter Decorators` will be ignored by TypeScript

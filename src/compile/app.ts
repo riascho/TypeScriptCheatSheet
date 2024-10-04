@@ -74,3 +74,35 @@ Console:
 5. LOGGER DECORATOR Header Template
 
 */
+
+// Returning Values in Class Decorators
+
+function WithClassInstantiation(template: string, hookId: string) {
+  return function <T extends { new (...args: any[]): { name: string } }>(
+    originalConstructor: T
+  ) {
+    return class extends originalConstructor {
+      // returns new class, essentially replacing the decorated class but by extending it
+      constructor(..._: any[]) {
+        super(); // call original constructor to preserve those values (otherwise would be overwritten)
+        const hookEl = document.getElementById(hookId);
+        if (hookEl) {
+          hookEl.innerHTML = template;
+          hookEl.querySelector("h1")!.textContent = this.name;
+        }
+      }
+    };
+  };
+}
+
+@WithClassInstantiation("<h1>My Favorite Fruit</h1>", "hook3") // at this point the decorator function is evaluated but not executed and index.html will be empty at hook3
+class Fruit {
+  name = "Banana";
+
+  constructor() {
+    console.log("Creating fruit object...");
+  }
+}
+
+const pear = new Fruit(); // at this point the decorator function is executed and index.html will have "Banana" in the h1 element
+pear.name = "Pear";
