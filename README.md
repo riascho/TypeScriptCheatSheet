@@ -1010,3 +1010,11 @@ The following decorator functions can return something:
 - `Access Decorators` - descriptors
 
 Any return values on `Property Decorators` or `Parameter Decorators` will be ignored by TypeScript
+
+## Using Decorators for Validation
+
+Decorators in TypeScript can be used for input validation by attaching validation logic to class properties or methods. When a property or method is decorated, the decorator function can include code to check the validity of the input values. This allows for centralized and reusable validation logic, ensuring that input values meet specified criteria before they are processed further.
+
+For example, a property decorator can validate that a string is not empty or that a number falls within a certain range, while a method decorator can validate the arguments passed to a method. By using decorators for input validation, developers can maintain cleaner and more maintainable code, as the validation logic is separated from the core business logic.
+
+See example in **[app.ts](./src/compile/app.ts#L157)**
