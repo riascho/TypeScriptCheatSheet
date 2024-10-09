@@ -166,6 +166,14 @@ interface ValidatorConfig {
 }
 
 const registeredValidators: ValidatorConfig = {};
+/* will be something like:
+  {
+    Course: {
+      title: ["required"],
+      price: ["positive"],
+    },
+  };
+  */
 
 // this function registers the class property to the validator for 'required'
 function Required(target: any, propertyName: string) {
@@ -243,7 +251,4 @@ courseForm.addEventListener("submit", (event) => {
     alert("Invalid Input! Please Try again!");
     return;
   }
-
-  console.log(newCourse);
-  console.log(registeredValidators);
 });
