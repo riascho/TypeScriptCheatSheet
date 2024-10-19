@@ -146,6 +146,14 @@ const printButton = new Printer();
 button.addEventListener("click", printButton.showMessage); // @Autobind decorator has overwritten the method to bind the 'this' context
 printButton.showMessage(); // this will also still work, same 'this' context
 const registeredValidators = {};
+/* will be something like:
+  {
+    Course: {
+      title: ["required"],
+      price: ["positive"],
+    },
+  };
+  */
 // this function registers the class property to the validator for 'required'
 function Required(target, propertyName) {
     var _a, _b;
@@ -212,7 +220,5 @@ courseForm.addEventListener("submit", (event) => {
         alert("Invalid Input! Please Try again!");
         return;
     }
-    console.log(newCourse);
-    console.log(registeredValidators);
 });
 //# sourceMappingURL=app.js.map

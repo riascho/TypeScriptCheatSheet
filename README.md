@@ -1018,3 +1018,89 @@ Decorators in TypeScript can be used for input validation by attaching validatio
 For example, a property decorator can validate that a string is not empty or that a number falls within a certain range, while a method decorator can validate the arguments passed to a method. By using decorators for input validation, developers can maintain cleaner and more maintainable code, as the validation logic is separated from the core business logic.
 
 See example in **[app.ts](./src/compile/app.ts#L157)**
+
+# Splitting Code - Modularization
+
+## Namespaces
+
+Namespaces in TypeScript are a way to organize and group related code, such as classes, interfaces, and functions, under a single name. They help prevent naming conflicts by providing a scope for identifiers, making it easier to manage large codebases.
+
+Namespaces are defined using the `namespace` keyword, and their members are accessed using dot notation. To use a namespace across multiple files, you can use the `/// <reference path="..." />` syntax to import the namespace, ensuring that the code is properly linked and accessible.
+
+### File 1: `drag-and-drop-interfaces.ts`
+
+Move interfaces into a common namespace group and make them exportable
+
+```typescript
+namespace App {
+  export interface Draggable {
+    // some code
+  }
+
+  export interface Droppable {
+    // some code
+  }
+}
+```
+
+### File 2: `project-model-interfaces.ts`
+
+```typescript
+namespace App {
+  export interface Project {
+    // some code
+  }
+
+  export interface ProjectState {
+    // some code
+  }
+}
+```
+
+### Main File: `app.ts`
+
+Importing the name spaces into other files using `///` (not comment but actual syntax!)
+
+```typescript
+/// <reference path="drag-and-drop-interfaces.ts" />
+/// <reference path="project-model-interfaces.ts" />
+
+namespace App {
+  // move everything in here that needs the referenced interfaces!
+}
+```
+
+When using multiple namespace files, they need to be "bundled" together so that JavaScript can reference them at run time.
+
+- update the `tsconfig.json` file with `"outFile": "./dist/bundle.js"`
+- need to change the `"module":` to `"amd"` (or similar)
+- instead of `app.js` -> import `bundle.js` in the index.html script tag
+
+## ES6 Modules
+
+ES6 modules allow you to organize your code into reusable pieces.
+
+1. **Exporting**: Use the `export` keyword to make functions, objects, classes or primitives available for import in other files.
+
+```typescript
+// utils.ts
+export function greet(name: string): string {
+  return `Hello, ${name}!`;
+}
+```
+
+2. **Importing**: Import from `.js` files because we rely on the browser to import these files. Ensure you specify same-level relative references with `./`
+
+```typescript
+// app.ts
+import { greet } from "./utils.js";
+console.log(greet("World"));
+```
+
+3. **Configuration**: In your `tsconfig.json`, set `"module": "es2015"` and `"target": "es6"` (or higher). Note that `"outFile"` is not supported in ES modules.
+
+4. **HTML Setup**: In your index.html, import the app.js file in the script tag. Make sure to include a `type="module"` attribute and do **not** load it with `defer`.
+
+```html
+<script type="module" src="./dist/app.js"></script>
+```
