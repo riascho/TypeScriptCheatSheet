@@ -1089,12 +1089,25 @@ export function greet(name: string): string {
 }
 ```
 
+Use `export default` to export only a single class, function, or primitive from a module. This allows you to import it with a simpler syntax.
+
+```typescript
+export default function greet(name: string): string {
+  return `Hello, ${name}!`;
+}
+```
+
 2. **Importing**: Import from `.js` files because we rely on the browser to import these files. Ensure you specify same-level relative references with `./`
 
 ```typescript
 // app.ts
 import { greet } from "./utils.js";
-console.log(greet("World"));
+```
+
+When importing a default export, you can use any name for the imported value.
+
+```typescript
+import greetings from "./utils.js";
 ```
 
 3. **Configuration**: In your `tsconfig.json`, set `"module": "es2015"` and `"target": "es6"` (or higher). Note that `"outFile"` is not supported in ES modules.
