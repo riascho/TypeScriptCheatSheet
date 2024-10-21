@@ -1117,3 +1117,116 @@ import greetings from "./utils.js";
 ```html
 <script type="module" src="./dist/app.js"></script>
 ```
+
+# TypeScript - JavaScript 3rd Party Libraries and Declaration
+
+When using a JavaScript library like Lodash in TypeScript, you need to install both the library itself and its TypeScript declaration files
+
+## [Lodash](https://lodash.com/)
+
+`npm install --save lodash` installs the Lodash library, making its functions available for use in your project.
+
+`npm install --save-dev @types/lodash` installs the TypeScript declaration files that provide type information about the Lodash library. This is necessary for TypeScript to understand the types of Lodash functions and provide type checking and autocompletion in your IDE.
+
+```typescript
+import _ from "lodash";
+
+const deck = ["Ace", "King", "Queen", "Jack"];
+const shuffled = _.shuffle(deck);
+```
+
+## Global Variables
+
+To use global JavaScript variables in TypeScript, you need to declare them so that TypeScript is aware of their existence and types. This is necessary because TypeScript needs to know the types of all variables to provide type checking and autocompletion.
+
+A global variable may exist in a `html` file:
+
+```html
+<body>
+  <script>
+    var GLOBAL = "SOMETHING";
+  </script>
+</body>
+```
+
+Global variables can be declared in a `.d.ts` file or at the top of your TypeScript file.
+
+```typescript
+declare var myGlobalVar: string;
+```
+
+## [Class Transformer](https://github.com/typestack/class-transformer)
+
+`class-transformer` is a JavaScript library used to transform plain JavaScript objects into class instances and vice versa. It helps in converting JSON objects to class instances, which can then be validated or manipulated using class methods. This is handy when fetching some JSON data from an API and we want to use as typescript conform class objects in our app.
+
+Run `npm install --save class-transformer` and `npm install --save reflect-metadata` to install.
+
+```typescript
+// Import
+import { plainToClass, classToPlain } from "class-transformer";
+
+// This our Class
+class Product {
+  name: string;
+  price: number;
+
+  constructor(name: string, price: number) {
+    this.name = name;
+    this.price = price;
+  }
+}
+
+// Example data fetched
+const products = [
+  { name: "Laptop", price: 1500 },
+  { name: "iPhone", price: 800 },
+  { name: "Mouse", price: 25 },
+  { name: "Keyboard", price: 50 },
+];
+
+// Transform plain object to class instance
+const productInstance = plainToClass(Product, products);
+
+// Transform class instance to plain object
+const plainObject = classToPlain(productInstance);
+```
+
+## [Class Validator](https://github.com/typestack/class-validator)
+
+`class-validator` is a TypeScript library that builds on TypeScript decorators used to validate class properties in TypeScript. It provides decorators to enforce validation rules on class properties, ensuring that the data meets specific criteria before processing.
+
+Run `npm install --save class-validator` to install.
+
+`class-validators` provide decorator factories that determine the rules (e.g. `@IsNotEmpty()`) but also need the `validate` function to enforce these rules.
+
+```typescript
+// Import
+import { IsNotEmpty, IsNumber, IsPositive, Min } from "class-validator";
+import { validate } from "class-validator";
+
+class Product {
+  @IsNotEmpty()
+  name: string;
+  @IsNumber()
+  @IsPositive()
+  @Min(10)
+  price: number;
+
+  constructor(n: string, p: number) {
+    this.name = n;
+    this.price = p;
+  }
+}
+
+const wrongProduct = new Product("", -5);
+validate(wrongProduct).then((errors) => {
+  // returns a promise with an array of errors
+  if (errors.length > 0) {
+    // if there are errors
+    console.log("Validation errors: ", errors);
+  } else {
+    console.log(wrongProduct);
+  }
+});
+// will log Validation errors:  [ 'name must be a string', 'name should not be empty', 'price must be a number', 'price must be a positive number', 'price must not be less than 10' ]
+```
